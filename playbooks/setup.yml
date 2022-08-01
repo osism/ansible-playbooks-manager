@@ -1,0 +1,21 @@
+---
+- name: Run network playbook
+  ansible.builtin.import_playbook: osism.manager.network
+
+- name: Run reboot playook
+  ansible.builtin.import_playbook: osism.manager.reboot
+
+- name: Run bootstrap playbook
+  ansible.builtin.import_playbook: osism.manager.bootstrap
+
+- name: Run configuration playbook
+  ansible.builtin.import_playbook: osism.manager.configuration
+
+# - name: Run traefik playbook
+#   ansible.builtin.import_playbook: osism.manager.traefik
+
+- name: Run netbox playbook
+  ansible.builtin.import_playbook: osism.manager.netbox
+
+- name: Run manager playbook
+  ansible.builtin.import_playbook: osism.manager.manager
