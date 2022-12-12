@@ -3,6 +3,7 @@
 
 - name: Make ssh pipelining working
   hosts: manager
+  gather_facts: false
   vars:
     ansible_ssh_pipelining: false
 
