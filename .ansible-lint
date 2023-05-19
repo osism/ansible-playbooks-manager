@@ -7,7 +7,6 @@ rulesdir:
 skip_list:
   - fqcn[keyword]
   - galaxy[no-changelog]
-  - parser-error  # AnsibleParserError.
   - template-instead-of-copy
 # DO NOT DELETE THE WARNLIST! It is required for our custom rules!
 # If this isn't there our custom rules will only through a warning and wont generate a failure!:
