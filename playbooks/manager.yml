@@ -13,9 +13,13 @@
 - name: Restart manager service
   hosts: manager
 
+  vars:
+    manager_service_restart: true
+
   tasks:
     - name: Restart manager service
       become: true
       ansible.builtin.service:
         name: docker-compose@manager
         state: restarted
+      when: manager_service_restart|bool
