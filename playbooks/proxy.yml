@@ -4,8 +4,5 @@
 - name: Apply role proxy
   hosts: manager
 
-  collections:
-    - osism.commons
-
   roles:
-    - role: proxy
+    - role: osism.commons.proxy

@@ -4,8 +4,5 @@
 - name: Apply role chrony
   hosts: manager
 
-  collections:
-    - osism.services
-
   roles:
-    - role: chrony
+    - role: osism.services.chrony

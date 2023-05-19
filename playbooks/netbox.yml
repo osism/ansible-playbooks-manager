@@ -4,8 +4,5 @@
 - name: Apply role netbox
   hosts: manager
 
-  collections:
-    - osism.services
-
   roles:
-    - role: netbox
+    - role: osism.services.netbox

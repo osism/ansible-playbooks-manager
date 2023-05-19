@@ -4,29 +4,20 @@
 - name: Apply role traefik
   hosts: manager
 
-  collections:
-    - osism.services
-
   roles:
-    - role: traefik
+    - role: osism.services.traefik
 
 - name: Apply role netbox
   hosts: manager
 
-  collections:
-    - osism.services
-
   roles:
-    - role: netbox
+    - role: osism.services.netbox
 
 - name: Apply role manager
   hosts: manager
 
-  collections:
-    - osism.services
-
   roles:
-    - role: manager
+    - role: osism.services.manager
 
 - name: Restart manager service
   hosts: manager
