@@ -4,8 +4,5 @@
 - name: Apply role network
   hosts: manager
 
-  collections:
-    - osism.commons
-
   roles:
-    - role: network
+    - role: osism.commons.network
