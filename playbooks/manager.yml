@@ -20,3 +20,24 @@
         name: docker-compose@manager
         state: restarted
       when: manager_service_restart | bool
+
+    # NOTE: The command returns a list of IDs of containers from the manager service
+    #       that are currently starting or unhealthy. As long as the list is not empty
+    #       the manager service is not in a good state.
+    - name: Wait for an healthy manager service
+      ansible.builtin.shell: |
+        set -o pipefail
+        bash -c '{ docker ps -aq \
+                    --filter "label=com.docker.compose.project=manager" \
+                    --filter "health=starting" && \
+                   docker ps -aq \
+                    --filter "label=com.docker.compose.project=manager" \
+                    --filter "health=unhealthy"; }' | \
+        sort | uniq -u
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: false
+      until: "result.stdout | length == 0"
+      retries: 30
+      delay: 20
