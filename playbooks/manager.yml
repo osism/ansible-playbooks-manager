@@ -32,12 +32,15 @@
                     --filter "health=starting" && \
                    docker ps -aq \
                     --filter "label=com.docker.compose.project=manager" \
+                    --filter "status=created" && \
+                   docker ps -aq \
+                    --filter "label=com.docker.compose.project=manager" \
                     --filter "health=unhealthy"; }' | \
         sort | uniq -u
       args:
         executable: /bin/bash
       register: result
-      changed_when: false
+      changed_when: true
       until: "result.stdout | length == 0"
       retries: 30
       delay: 20
