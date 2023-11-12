@@ -8,10 +8,10 @@
     docker_registry: index.docker.io
     images:
       - "{{ ara_server_image }}"
+      - "{{ ara_server_mariadb_image }}"
       - "{{ ceph_ansible_image }}"
       - "{{ inventory_reconciler_image }}"
       - "{{ kolla_ansible_image }}"
-      - "{{ mariadb_image }}"
       - "{{ netbox_image }}"
       - "{{ osism_ansible_image }}"
       - "{{ osism_image }}"
