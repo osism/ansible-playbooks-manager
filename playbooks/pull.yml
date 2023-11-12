@@ -19,7 +19,6 @@
       - "{{ osism_netbox_image }}"
       - "{{ postgres_image }}"
       - "{{ traefik_image }}"
-      - "{{ vault_image }}"
 
   tasks:
     - name: Pull images
