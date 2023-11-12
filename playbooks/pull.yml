@@ -39,3 +39,4 @@
       register: async_poll_results
       until: async_poll_results.finished
       retries: 30
+      ignore_errors: true
