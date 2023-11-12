@@ -12,12 +12,12 @@
       - "{{ ceph_ansible_image }}"
       - "{{ inventory_reconciler_image }}"
       - "{{ kolla_ansible_image }}"
+      - "{{ manager_redis_image }}"
       - "{{ netbox_image }}"
       - "{{ osism_ansible_image }}"
       - "{{ osism_image }}"
       - "{{ osism_netbox_image }}"
       - "{{ postgres_image }}"
-      - "{{ redis_image }}"
       - "{{ traefik_image }}"
       - "{{ vault_image }}"
 
