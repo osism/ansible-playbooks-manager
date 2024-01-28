@@ -22,4 +22,3 @@
   roles:
     - role: osism.commons.operator
       tags: operator
-      failed_when: false
