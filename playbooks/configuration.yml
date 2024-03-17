@@ -3,7 +3,6 @@
 
 - name: Update configuration
   hosts: manager
-  gather_facts: false
 
   roles:
     - role: osism.commons.configuration
