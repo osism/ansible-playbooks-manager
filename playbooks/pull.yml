@@ -26,6 +26,7 @@
       poll: 0
       loop: "{{ images }}"
       register: async_results
+      ignore_errors: true
 
     - name: Check sync status
       ansible.builtin.async_status:
@@ -37,3 +38,16 @@
       until: async_poll_results.finished
       retries: 30
       ignore_errors: true
+
+    - name: Identify failed image pulls
+      ansible.builtin.set_fact:
+        failed_images: "{{ async_poll_results.results | selectattr('failed', 'equalto', true) | map(attribute='async_result_item.item') | list }}"
+
+    - name: Retry failed image pulls
+      community.docker.docker_image:
+        name: "{{ item }}"
+        source: pull
+      loop: "{{ failed_images }}"
+      retries: 3
+      delay: 5
+      when: failed_images | length > 0
