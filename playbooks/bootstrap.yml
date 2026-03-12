@@ -4,42 +4,64 @@
 
   roles:
     - role: osism.commons.hostname
-      tags: hostname
+      tags:
+        - part1
+        - hostname
 
     - role: osism.commons.hosts
-      tags: hosts
+      tags:
+        - part1
+        - hosts
 
     - role: osism.commons.proxy
-      tags: proxy
+      tags:
+        - part1
+        - proxy
 
     - role: osism.commons.sshconfig
       # This ensures that only any extra SSH configuration configured
       # is written to the Manager at this point.
       vars:
         sshconfig_private_key_file: ""
-      tags: sshconfig
+      tags:
+        - part1
+        - sshconfig
 
     - role: osism.commons.certificates
-      tags: certificates
+      tags:
+        - part1
+        - certificates
 
     - role: osism.commons.resolvconf
-      tags: resolvconf
+      tags:
+        - part1
+        - resolvconf
 
     - role: osism.commons.repository
-      tags: repository
+      tags:
+        - part1
+        - repository
 
 - name: Bootstrap manager node - pt. 2
   hosts: manager
 
   roles:
     - role: osism.commons.timezone
-      tags: timezone
+      tags:
+        - part2
+        - timezone
 
     - role: osism.services.chrony
-      tags: chrony
+      tags:
+        - part2
+        - chrony
 
     - role: osism.services.docker
-      tags: docker
+      tags:
+        - part2
+        - docker
 
     - role: osism.commons.docker_compose
-      tags: docker
+      tags:
+        - part2
+        - docker
