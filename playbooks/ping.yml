@@ -1,0 +1,10 @@
+---
+- name: Ping systems
+  hosts: manager
+  gather_facts: false
+
+  tasks:
+    - name: Ping system
+      ansible.builtin.ping:
+      retries: 10
+      delay: 5
