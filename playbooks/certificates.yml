@@ -1,0 +1,6 @@
+---
+- name: Apply role certificates
+  hosts: manager
+
+  roles:
+    - role: osism.commons.certificates
