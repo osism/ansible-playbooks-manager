@@ -1,0 +1,135 @@
+---
+- name: Confirm whether user really meant to purge the manager environment
+  hosts: manager
+  gather_facts: false
+
+  vars_prompt:
+    - name: ireallymeanit
+      prompt: Are you sure you want to purge the manager environment?
+      default: 'no'
+      private: false
+
+    - name: ireallyreallymeanit
+      prompt: Are you really sure you want to purge the manager environment?
+      default: 'no'
+      private: false
+
+  tasks:
+    - name: Exit playbook, if user did not mean to purge the manager environment
+      ansible.builtin.fail:
+        msg: >
+          "To purge the manager environment, either say 'yes' and 'ireallyreallymeanit'
+           on the prompt or use `-e ireallymeanit=yes` and
+           `-e ireallyreallymeanit=ireallyreallymeanit` on the command line when
+           invoking the playbook"
+      when:
+        - ireallymeanit != 'yes' or ireallyreallymeanit != 'ireallyreallymeanit'
+
+- name: Purge manager environment
+  hosts: manager
+  gather_facts: false
+
+  vars:
+    manager_service_name: manager
+    manager_old_service_name: docker-compose@manager
+    manager_docker_compose_directory: /opt/manager
+
+    traefik_external_network_name: traefik
+
+    # Remove the container images pulled for the manager services as well.
+    # Disabled by default, enable with `-e manager_purge_images=true`.
+    manager_purge_images: false
+
+    manager_purge_directories:
+      - /opt/manager
+      - /opt/ansible
+      - /opt/archive
+      - /opt/state
+      - /opt/configuration
+
+    manager_purge_scripts:
+      - osism
+      - osism-ansible
+      - osism-ceph
+      - osism-custom
+      - osism-generic
+      - osism-infrastructure
+      - osism-kolla
+      - osism-manager
+      - osism-monitoring
+      - osism-openstack
+      - osism-run
+      - osism-run-without-secrets
+      - osism-state
+      - osism-update-docker
+      - osism-update-manager
+      - osism-validate
+      - osism-include
+      - cilium
+      - hubble
+      - flux
+
+  tasks:
+    - name: Stop and disable the manager service
+      become: true
+      ansible.builtin.systemd_service:
+        name: "{{ item }}"
+        state: stopped
+        enabled: false
+      loop:
+        - "{{ manager_service_name }}"
+        - "{{ manager_old_service_name }}"
+      # The services may already be gone, do not fail in that case.
+      failed_when: false
+
+    - name: Check whether the manager Docker Compose file exists
+      ansible.builtin.stat:
+        path: "{{ manager_docker_compose_directory }}/docker-compose.yml"
+      register: manager_compose_file
+
+    - name: Tear down the manager Docker Compose project
+      community.docker.docker_compose_v2:
+        project_src: "{{ manager_docker_compose_directory }}"
+        state: absent
+        remove_orphans: true
+        remove_volumes: true
+        remove_images: "{{ 'all' if manager_purge_images | bool else omit }}"
+      when: manager_compose_file.stat.exists
+
+    - name: Remove the traefik external network
+      community.docker.docker_network:
+        name: "{{ traefik_external_network_name }}"
+        state: absent
+
+    - name: Remove the manager systemd unit file
+      become: true
+      ansible.builtin.file:
+        path: "/etc/systemd/system/{{ manager_service_name }}.service"
+        state: absent
+      register: manager_unit_file
+
+    - name: Reload systemd daemon
+      become: true
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+      when: manager_unit_file.changed  # noqa: no-handler
+
+    - name: Remove the osism bash completion script
+      become: true
+      ansible.builtin.file:
+        path: /etc/bash_completion.d/osism
+        state: absent
+
+    - name: Remove the manager wrapper and helper scripts
+      become: true
+      ansible.builtin.file:
+        path: "/usr/local/bin/{{ item }}"
+        state: absent
+      loop: "{{ manager_purge_scripts }}"
+
+    - name: Remove the manager directories
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ manager_purge_directories }}"
