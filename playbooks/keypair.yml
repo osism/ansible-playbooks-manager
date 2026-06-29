@@ -8,6 +8,15 @@
     keypair_dest: "{{ playbook_dir }}/id_rsa.operator"
 
   tasks:
+    - name: Fail if the operator private key is empty or not a private key
+      ansible.builtin.assert:
+        that:
+          - operator_private_key | default('') | trim | length > 0
+          - "'PRIVATE KEY' in (operator_private_key | default(''))"
+        fail_msg: >-
+          operator_private_key is empty or does not contain a private key;
+          refusing to write id_rsa.operator.
+
     - name: Create id_operator.rsa file
       ansible.builtin.copy:
         content: "{{ operator_private_key }}"
