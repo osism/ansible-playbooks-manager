@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This file was started on June 14, 2023. Changes prior to this date are not included in the CHANGELOG.
 
+## [v0.20260721.0] - 2026-07-21
+
+### Fixed
+- Fix project-board automation for fork PRs by switching to `pull_request_target` and passing only the required secret instead of inheriting all secrets (osism/ansible-playbooks-manager#51)
+- Fail early with a clear error when the operator private key is empty or invalid instead of silently writing an unusable key file (osism/ansible-playbooks-manager#52)
+
+## [v0.20260615.0] - 2026-06-15
+
+### Added
+- Add GitHub Actions workflow to automatically add opened issues and PRs to the project board (osism/ansible-playbooks-manager#49)
+- Add purge play to remove the manager environment (osism/ansible-playbooks-manager#50)
+
+## [v0.20260504.0] - 2026-05-04
+
+### Added
+- Add CHANGELOG.md file (osism/ansible-playbooks-manager#47)
+- Add certificates play (osism/ansible-playbooks-manager#48)
+
 ## [v0.20260312.0] - 2026-03-12
 
 ### Added
