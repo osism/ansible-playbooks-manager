@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This file was started on June 14, 2023. Changes prior to this date are not included in the CHANGELOG.
 
+## [v0.20261111.0] - 2026-11-11
+
+### Changed
+- Run publish workflow on Python 3.12 and ansible-core 2.18.18 to fix collection publishing on GitHub's updated runner image (osism/ansible-playbooks-manager#54)
+
 ## [v0.20260721.0] - 2026-07-21
 
 ### Fixed
